@@ -69,6 +69,14 @@
       (error "this stream does not support the NO-HANG argument"))
     (when interactive
       (error "this stream does not support the INTERACTIVE argument"))
+    (stream-write-sequence s seq start end))
+
+  (defmethod gray:stream-read-char-sequence
+      ((s trivial-gray-stream-mixin) seq &optional start end)
+    (stream-read-sequence s seq start end))
+
+  (defmethod gray:stream-write-char-sequence
+      ((s trivial-gray-stream-mixin) seq &optional start end)
     (stream-write-sequence s seq start end)))
 
 #+sbcl
