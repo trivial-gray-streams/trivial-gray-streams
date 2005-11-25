@@ -14,7 +14,10 @@ How to use it
    implementation-specific package you would have to use otherwise to
    get at gray stream symbols.
 2. For STREAM-READ-SEQUENCE and STREAM-WRITE-SEQUENCE, notice that we
-   use two &OPTIONAL arguments.
-3. In order for (2) to work on Lispworks, CLISP, and OpenMCL, make sure to
-   subclass all your stream classes from TRIVIAL-GRAY-STREAM-MIXIN if you
-   intend to define methods on those two generic functions.
+   use two required arguments and allow additional keyword arguments.
+   So the lambda list when defining a method on either function should look
+   like this:
+     (stream sequence start end &key)
+3. In order for (2) to work on all Lisps, make sure to subclass all your
+   stream classes from TRIVIAL-GRAY-STREAM-MIXIN if you intend to define
+   methods on those two generic functions.

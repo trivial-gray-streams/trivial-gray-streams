@@ -30,12 +30,6 @@
 			  #+openmcl :ccl
 			  #+lispworks :stream
 			  #-(or sbcl allegro cmu clisp openmcl lispworks) ...
-
-			  #-(or lispworks clisp openmcl)
-                          #:stream-read-sequence
-			  #-(or lispworks clisp openmcl)
-                          #:stream-write-sequence
-
 			  ,@common-symbols)
 	    (:export #:trivial-gray-stream-mixin
 		     #:stream-read-sequence
