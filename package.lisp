@@ -4,6 +4,11 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require :gray-streams))
 
+#+allegro
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (unless (fboundp 'stream:stream-write-string)
+    (require "streamc.fasl")))
+
 (macrolet
     ((frob ()
        (let
