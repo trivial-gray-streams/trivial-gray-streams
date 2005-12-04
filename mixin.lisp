@@ -11,6 +11,11 @@
     ((stream trivial-gray-stream-mixin) seq &optional start end)
   (stream-write-sequence stream seq (or start 0) (or end (length seq))))
 
+;; Implementations should provide this default method, I believe, but
+;; at least sbcl and allegro don't.
+(defmethod stream-terpri ((stream trivial-gray-stream-mixin))
+  (write-char #\newline stream))
+
 #+allegro
 (progn
   (defmethod excl:stream-read-sequence
@@ -34,7 +39,6 @@
   (defmethod stream:stream-read-sequence
       ((s trivial-gray-stream-mixin) seq start end)
     (stream-read-sequence s seq start end))
-
   (defmethod stream:stream-write-sequence
       ((s trivial-gray-stream-mixin) seq start end)
     (stream-write-sequence s seq start end)))
@@ -44,7 +48,6 @@
   (defmethod ccl:stream-read-vector
       ((s trivial-gray-stream-mixin) seq start end)
     (stream-read-sequence s seq start end))
-
   (defmethod ccl:stream-write-vector
       ((s trivial-gray-stream-mixin) seq start end)
     (stream-write-sequence s seq start end)))
@@ -89,7 +92,4 @@
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
   ;; SBCL extension:
   (defmethod sb-gray:stream-line-length ((stream trivial-gray-stream-mixin))
-    80)
-  ;; SBCL should provide this default method, but doesn't?
-  (defmethod stream-terpri ((stream trivial-gray-stream-mixin))
-    (write-char #\newline stream)))
+    80))
