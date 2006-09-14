@@ -7,6 +7,9 @@
 (defgeneric stream-write-sequence
     (stream sequence start end &key &allow-other-keys))
 
+(defgeneric stream-file-position (stream))
+(defgeneric (setf stream-file-position) (newval stream))
+
 (defmethod stream-write-string
     ((stream trivial-gray-stream-mixin) seq &optional start end)
   (stream-write-sequence stream seq (or start 0) (or end (length seq))))
@@ -15,6 +18,14 @@
 ;; at least sbcl and allegro don't.
 (defmethod stream-terpri ((stream trivial-gray-stream-mixin))
   (write-char #\newline stream))
+
+(defmethod stream-file-position ((stream trivial-gray-stream-mixin))
+  nil)
+
+(defmethod (setf stream-file-position)
+    (newval (stream trivial-gray-stream-mixin))
+  (declare (ignore newval))
+  nil)
 
 #+allegro
 (progn
@@ -41,7 +52,13 @@
     (stream-read-sequence s seq start end))
   (defmethod stream:stream-write-sequence
       ((s trivial-gray-stream-mixin) seq start end)
-    (stream-write-sequence s seq start end)))
+    (stream-write-sequence s seq start end))
+
+  (defmethod stream:stream-file-position ((stream trivial-gray-stream-mixin))
+    (stream-file-position stream))
+  (defmethod (setf stream:stream-file-position)
+      (newval (stream trivial-gray-stream-mixin))
+    (setf (stream-file-position stream) newval)))
 
 #+openmcl
 (progn
@@ -80,7 +97,12 @@
 
   (defmethod gray:stream-write-char-sequence
       ((s trivial-gray-stream-mixin) seq &optional start end)
-    (stream-write-sequence s seq start end)))
+    (stream-write-sequence s seq start end))
+
+  (defmethod gray:stream-position ((stream trivial-gray-stream-mixin) position)
+    (if position
+	(setf (stream-file-position stream) position)
+        (stream-file-position stream))))
 
 #+sbcl
 (progn

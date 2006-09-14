@@ -39,5 +39,6 @@
 	    (:export #:trivial-gray-stream-mixin
 		     #:stream-read-sequence
 		     #:stream-write-sequence
+		     #:stream-file-position
 		     ,@common-symbols)))))
   (frob))

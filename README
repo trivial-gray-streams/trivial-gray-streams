@@ -21,3 +21,17 @@ How to use it
 3. In order for (2) to work on all Lisps, make sure to subclass all your
    stream classes from TRIVIAL-GRAY-STREAM-MIXIN if you intend to define
    methods on those two generic functions.
+
+
+Extensions
+==========
+
+Generic function STREAM-READ-SEQUENCE (stream sequence start end &key)
+Generic function STREAM-WRITE-SEQUENCE (stream sequence start end &key)
+
+	See above.
+
+Generic function STREAM-FILE-POSITION (stream) => file position
+Generic function (SETF STREAM-FILE-POSITION) (position-spec stream) => successp
+
+	Will only be called by LispWorks and CLISP.
