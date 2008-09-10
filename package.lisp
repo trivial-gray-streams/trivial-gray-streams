@@ -9,6 +9,10 @@
   (unless (fboundp 'stream:stream-write-string)
     (require "streamc.fasl")))
 
+#+ecl
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (gray::redefine-cl-functions))
+
 (macrolet
     ((frob ()
        (let
@@ -34,7 +38,8 @@
 			  #+clisp :gray
 			  #+openmcl :ccl
 			  #+lispworks :stream
-			  #-(or sbcl allegro cmu clisp openmcl lispworks) ...
+			  #+ecl :gray
+			  #-(or sbcl allegro cmu clisp openmcl lispworks ecl) ...
 			  ,@common-symbols)
 	    (:export #:trivial-gray-stream-mixin
 		     #:stream-read-sequence
