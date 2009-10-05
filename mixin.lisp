@@ -131,7 +131,7 @@
 
   (defmethod gray:stream-position ((stream trivial-gray-stream-mixin) position)
     (if position
-	(setf (stream-file-position stream) position)
+        (setf (stream-file-position stream) position)
         (stream-file-position stream))))
 
 #+sbcl
@@ -142,6 +142,11 @@
   (defmethod sb-gray:stream-write-sequence
       ((s trivial-gray-stream-mixin) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
+  (defmethod sb-gray:stream-file-position 
+      ((stream trivial-gray-stream-mixin) &optional position)
+    (if position
+        (setf (stream-file-position stream) position)
+        (stream-file-position stream)))
   ;; SBCL extension:
   (defmethod sb-gray:stream-line-length ((stream trivial-gray-stream-mixin))
     80))
@@ -150,7 +155,9 @@
 (progn
   (defmethod gray:stream-read-sequence
     ((s trivial-gray-stream-mixin) seq &optional start end)
+    (format t "trivial-read~%")
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   (defmethod gray:stream-write-sequence
     ((s trivial-gray-stream-mixin) seq &optional start end)
+    (format t "trivial-write~%")
     (stream-write-sequence s seq (or start 0) (or end (length seq)))))

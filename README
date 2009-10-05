@@ -29,9 +29,9 @@ Extensions
 Generic function STREAM-READ-SEQUENCE (stream sequence start end &key)
 Generic function STREAM-WRITE-SEQUENCE (stream sequence start end &key)
 
-	See above.
+        See above.
 
 Generic function STREAM-FILE-POSITION (stream) => file position
 Generic function (SETF STREAM-FILE-POSITION) (position-spec stream) => successp
 
-	Will only be called by LispWorks and CLISP.
+        Will only be called by LispWorks, CLISP and SBCL.
