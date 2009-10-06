@@ -155,9 +155,7 @@
 (progn
   (defmethod gray:stream-read-sequence
     ((s trivial-gray-stream-mixin) seq &optional start end)
-    (format t "trivial-read~%")
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   (defmethod gray:stream-write-sequence
     ((s trivial-gray-stream-mixin) seq &optional start end)
-    (format t "trivial-write~%")
     (stream-write-sequence s seq (or start 0) (or end (length seq)))))
