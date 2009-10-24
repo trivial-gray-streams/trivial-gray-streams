@@ -1,4 +1,6 @@
-(in-package :trivial-gray-streams-system)
+#+xcvb (module ())
+
+(in-package :cl-user)
 
 #+cmu
 (eval-when (:compile-toplevel :load-toplevel :execute)

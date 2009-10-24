@@ -1,3 +1,5 @@
+#+xcvb (module (:depends-on ("package")))
+
 (in-package :trivial-gray-streams)
 
 (defclass trivial-gray-stream-mixin () ())
