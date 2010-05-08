@@ -2,6 +2,10 @@
 
 (in-package :cl-user)
 
+#+:abcl
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (require :gray-streams))
+
 #+cmu
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require :gray-streams))
@@ -40,8 +44,9 @@
 			  #+clisp :gray
 			  #+openmcl :ccl
 			  #+lispworks :stream
-			  #+ecl :gray
-			  #-(or sbcl allegro cmu clisp openmcl lispworks ecl) ...
+                          #+ecl :gray
+			  #+abcl :gray-streams
+			  #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl) ...
 			  ,@common-symbols)
 	    (:export #:trivial-gray-stream-mixin
 		     #:stream-read-sequence

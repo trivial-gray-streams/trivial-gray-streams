@@ -29,6 +29,20 @@
   (declare (ignore newval))
   nil)
 
+#+abcl
+(progn
+  (defmethod gray-streams:stream-read-sequence 
+      ((s trivial-gray-stream-mixin) seq &optional start end)
+    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+  
+  (defmethod gray-streams:stream-write-sequence 
+      ((s trivial-gray-stream-mixin) seq &optional start end)
+    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+  
+  (defmethod gray-streams:stream-write-string 
+      ((stream xp::xp-structure) string &optional (start 0) (end (length string)))
+    (xp::write-string+ string stream start end)))
+
 #+allegro
 (progn
   (defmethod excl:stream-read-sequence
