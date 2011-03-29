@@ -42,8 +42,11 @@
   (defmethod gray-streams:stream-write-string 
       ((stream xp::xp-structure) string &optional (start 0) (end (length string)))
     (xp::write-string+ string stream start end))
-  
-  #+#.(cl:if (cl:find-symbol "STREAM-FILE-POSITION" :gray-streams) '(cl:and) '(cl:or))
+
+  #+#.(cl:if (cl:and (cl:find-package :gray-streams)
+		     (cl:find-symbol "STREAM-FILE-POSITION" :gray-streams))
+	     '(:and)
+	     '(:or))
   (defmethod gray-streams:stream-file-position
       ((s trivial-gray-stream-mixin) &optional position)
     (if position
