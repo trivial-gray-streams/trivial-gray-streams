@@ -100,7 +100,17 @@
     (stream-read-sequence s seq start end))
   (defmethod ccl:stream-write-vector
       ((s trivial-gray-stream-mixin) seq start end)
-    (stream-write-sequence s seq start end)))
+    (stream-write-sequence s seq start end))
+
+  (defmethod ccl:stream-read-list ((s trivial-gray-stream-mixin) list count)
+    (stream-read-sequence s list 0 count))
+  (defmethod ccl:stream-write-list ((s trivial-gray-stream-mixin) list count)
+    (stream-write-sequence s list 0 count))
+
+  (defmethod ccl::stream-position ((stream trivial-gray-stream-mixin) &optional new-position)
+    (if new-position
+	(setf (stream-file-position stream) new-position)
+	(stream-file-position stream))))
 
 ;; up to version 2.43 there were no
 ;; stream-read-sequence, stream-write-sequence
