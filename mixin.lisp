@@ -202,3 +202,17 @@
   (defmethod gray:stream-write-sequence
     ((s trivial-gray-stream-mixin) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq)))))
+
+#+mocl
+(progn
+  (defmethod gray:stream-read-sequence
+      ((s trivial-gray-stream-mixin) seq &optional start end)
+    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+  (defmethod gray:stream-write-sequence
+      ((s trivial-gray-stream-mixin) seq &optional start end)
+    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+  (defmethod gray:stream-file-position
+      ((stream trivial-gray-stream-mixin) &optional position)
+    (if position
+	(setf (stream-file-position stream) position)
+	(stream-file-position stream))))

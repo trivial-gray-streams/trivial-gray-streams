@@ -41,12 +41,11 @@
 	    (:import-from #+sbcl :sb-gray
 			  #+allegro :excl
 			  #+cmu :ext
-			  #+clisp :gray
+			  #+(or clisp ecl mocl) :gray
 			  #+openmcl :ccl
 			  #+lispworks :stream
-                          #+ecl :gray
 			  #+abcl :gray-streams
-			  #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl) ...
+			  #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl mocl) ...
 			  ,@common-symbols)
 	    (:export #:trivial-gray-stream-mixin
 		     #:stream-read-sequence
