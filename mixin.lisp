@@ -117,7 +117,7 @@
 ;; functions in CLISP
 #+clisp
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (when (find-symbol "STREAM-READ-SEQUENCE" "GRAY")
+  (when (find-symbol (string #:stream-read-sequence) #:gray)
     (pushnew :clisp-has-stream-read/write-sequence *features*)))
 
 #+clisp
