@@ -18,9 +18,6 @@ How to use it
    So the lambda list when defining a method on either function should look
    like this:
      (stream sequence start end &key)
-3. In order for (2) to work on all Lisps, make sure to subclass all your
-   stream classes from TRIVIAL-GRAY-STREAM-MIXIN if you intend to define
-   methods on those two generic functions.
 
 
 Extensions

@@ -3,5 +3,5 @@
   (:fullname "trivial-gray-streams"
    :depends-on
     ("package"
-     "mixin")
+     "streams")
    :supersedes-asdf ("trivial-gray-streams")))

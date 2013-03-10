@@ -2,7 +2,27 @@
 
 (in-package :trivial-gray-streams)
 
-(defclass trivial-gray-stream-mixin () ())
+(defclass fundamental-stream (impl-specific-gray:fundamental-stream) ())
+(defclass fundamental-input-stream
+    (impl-specific-gray:fundamental-input-stream fundamental-stream) ())
+(defclass fundamental-output-stream
+    (impl-specific-gray:fundamental-output-stream fundamental-stream) ())
+(defclass fundamental-character-stream
+    (impl-specific-gray:fundamental-character-stream fundamental-stream) ())
+(defclass fundamental-binary-stream
+    (impl-specific-gray:fundamental-binary-stream fundamental-stream) ())
+(defclass fundamental-character-input-stream
+    (impl-specific-gray:fundamental-character-input-stream
+     fundamental-input-stream fundamental-character-stream) ())
+(defclass fundamental-character-output-stream
+    (impl-specific-gray:fundamental-character-output-stream
+     fundamental-output-stream fundamental-character-stream) ())
+(defclass fundamental-binary-input-stream
+    (impl-specific-gray:fundamental-binary-input-stream
+     fundamental-input-stream fundamental-binary-stream) ())
+(defclass fundamental-binary-output-stream
+    (impl-specific-gray:fundamental-binary-output-stream
+     fundamental-output-stream fundamental-binary-stream) ())
 
 (defgeneric stream-read-sequence
     (stream sequence start end &key &allow-other-keys))
@@ -13,30 +33,30 @@
 (defgeneric (setf stream-file-position) (newval stream))
 
 (defmethod stream-write-string
-    ((stream trivial-gray-stream-mixin) seq &optional start end)
+    ((stream fundamental-output-stream) seq &optional start end)
   (stream-write-sequence stream seq (or start 0) (or end (length seq))))
 
 ;; Implementations should provide this default method, I believe, but
 ;; at least sbcl and allegro don't.
-(defmethod stream-terpri ((stream trivial-gray-stream-mixin))
+(defmethod stream-terpri ((stream fundamental-output-stream))
   (write-char #\newline stream))
 
-(defmethod stream-file-position ((stream trivial-gray-stream-mixin))
+(defmethod stream-file-position ((stream fundamental-stream))
   nil)
 
 (defmethod (setf stream-file-position)
-    (newval (stream trivial-gray-stream-mixin))
+    (newval (stream fundamental-stream))
   (declare (ignore newval))
   nil)
 
 #+abcl
 (progn
   (defmethod gray-streams:stream-read-sequence 
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   
   (defmethod gray-streams:stream-write-sequence 
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
   
   (defmethod gray-streams:stream-write-string 
@@ -48,7 +68,7 @@
 	     '(:and)
 	     '(:or))
   (defmethod gray-streams:stream-file-position
-      ((s trivial-gray-stream-mixin) &optional position)
+      ((s fundamental-stream) &optional position)
     (if position
         (setf (stream-file-position s) position)
         (stream-file-position s))))
@@ -56,15 +76,15 @@
 #+allegro
 (progn
   (defmethod excl:stream-read-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
 
   (defmethod excl:stream-write-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
 
   (defmethod excl::stream-file-position
-       ((stream trivial-gray-stream-mixin) &optional position)
+       ((stream fundamental-stream) &optional position)
      (if position
          (setf (stream-file-position stream) position)
          (stream-file-position stream))))
@@ -72,42 +92,42 @@
 #+cmu
 (progn
   (defmethod ext:stream-read-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   (defmethod ext:stream-write-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq)))))
 
 #+lispworks
 (progn
   (defmethod stream:stream-read-sequence
-      ((s trivial-gray-stream-mixin) seq start end)
+      ((s fundamental-input-stream) seq start end)
     (stream-read-sequence s seq start end))
   (defmethod stream:stream-write-sequence
-      ((s trivial-gray-stream-mixin) seq start end)
+      ((s fundamental-output-stream) seq start end)
     (stream-write-sequence s seq start end))
 
-  (defmethod stream:stream-file-position ((stream trivial-gray-stream-mixin))
+  (defmethod stream:stream-file-position ((stream fundamental-stream))
     (stream-file-position stream))
   (defmethod (setf stream:stream-file-position)
-      (newval (stream trivial-gray-stream-mixin))
+      (newval (stream fundamental-stream))
     (setf (stream-file-position stream) newval)))
 
 #+openmcl
 (progn
   (defmethod ccl:stream-read-vector
-      ((s trivial-gray-stream-mixin) seq start end)
+      ((s fundamental-input-stream) seq start end)
     (stream-read-sequence s seq start end))
   (defmethod ccl:stream-write-vector
-      ((s trivial-gray-stream-mixin) seq start end)
+      ((s fundamental-output-stream) seq start end)
     (stream-write-sequence s seq start end))
 
-  (defmethod ccl:stream-read-list ((s trivial-gray-stream-mixin) list count)
+  (defmethod ccl:stream-read-list ((s fundamental-input-stream) list count)
     (stream-read-sequence s list 0 count))
-  (defmethod ccl:stream-write-list ((s trivial-gray-stream-mixin) list count)
+  (defmethod ccl:stream-write-list ((s fundamental-output-stream) list count)
     (stream-write-sequence s list 0 count))
 
-  (defmethod ccl::stream-position ((stream trivial-gray-stream-mixin) &optional new-position)
+  (defmethod ccl::stream-position ((stream fundamental-stream) &optional new-position)
     (if new-position
 	(setf (stream-file-position stream) new-position)
 	(stream-file-position stream))))
@@ -125,27 +145,17 @@
 
   #+clisp-has-stream-read/write-sequence
   (defmethod gray:stream-read-sequence
-      (seq (s trivial-gray-stream-mixin) &key start end)
+      (seq (s fundamental-input-stream) &key start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
 
   #+clisp-has-stream-read/write-sequence
   (defmethod gray:stream-write-sequence
-      (seq (s trivial-gray-stream-mixin) &key start end)
+      (seq (s fundamental-output-stream) &key start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
-  
-  ;; Even despite the stream-read/write-sequence are present in newer 
-  ;; CLISP, it's better to provide stream-(read/write)-(byte/char)-sequence
-  ;; methods too.
-  ;; Example: if fundamental-binary-input-stream comes in the
-  ;; class precedence list of your user-defined stream before
-  ;; the trivial-gray-steam-mixin, the default CLISP's implementation
-  ;; of the gray:stream-read-sequence will be used; and this default 
-  ;; implementation calls the gray:stream-read-byte-sequence.
-  ;; Therefore we override gray:stream-read-byte-sequence and call
-  ;; our stream-read-sequence.
 
+  ;;; for old CLISP
   (defmethod gray:stream-read-byte-sequence
-      ((s trivial-gray-stream-mixin)
+      ((s fundamental-input-stream)
        seq
        &optional start end no-hang interactive)
     (when no-hang
@@ -155,7 +165,7 @@
     (stream-read-sequence s seq start end))
 
   (defmethod gray:stream-write-byte-sequence
-      ((s trivial-gray-stream-mixin)
+      ((s fundamental-output-stream)
        seq
        &optional start end no-hang interactive)
     (when no-hang
@@ -165,14 +175,16 @@
     (stream-write-sequence s seq start end))
 
   (defmethod gray:stream-read-char-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq start end))
 
   (defmethod gray:stream-write-char-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq start end))
 
-  (defmethod gray:stream-position ((stream trivial-gray-stream-mixin) position)
+  ;;; end of old CLISP read/write-sequence support
+
+  (defmethod gray:stream-position ((stream fundamental-stream) position)
     (if position
         (setf (stream-file-position stream) position)
         (stream-file-position stream))))
@@ -180,39 +192,43 @@
 #+sbcl
 (progn
   (defmethod sb-gray:stream-read-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   (defmethod sb-gray:stream-write-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
   (defmethod sb-gray:stream-file-position 
-      ((stream trivial-gray-stream-mixin) &optional position)
+      ((stream fundamental-stream) &optional position)
     (if position
         (setf (stream-file-position stream) position)
         (stream-file-position stream)))
   ;; SBCL extension:
-  (defmethod sb-gray:stream-line-length ((stream trivial-gray-stream-mixin))
+  (defmethod sb-gray:stream-line-length ((stream fundamental-stream))
     80))
 
 #+ecl
 (progn
   (defmethod gray:stream-read-sequence
-    ((s trivial-gray-stream-mixin) seq &optional start end)
+    ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   (defmethod gray:stream-write-sequence
-    ((s trivial-gray-stream-mixin) seq &optional start end)
+    ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq)))))
 
 #+mocl
 (progn
   (defmethod gray:stream-read-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-input-stream) seq &optional start end)
     (stream-read-sequence s seq (or start 0) (or end (length seq))))
   (defmethod gray:stream-write-sequence
-      ((s trivial-gray-stream-mixin) seq &optional start end)
+      ((s fundamental-output-stream) seq &optional start end)
     (stream-write-sequence s seq (or start 0) (or end (length seq))))
   (defmethod gray:stream-file-position
-      ((stream trivial-gray-stream-mixin) &optional position)
+      ((stream fundamental-stream) &optional position)
     (if position
 	(setf (stream-file-position stream) position)
 	(stream-file-position stream))))
+
+;; deprecated
+(defclass trivial-gray-stream-mixin () ())
+
