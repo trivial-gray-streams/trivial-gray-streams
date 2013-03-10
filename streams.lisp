@@ -4,25 +4,25 @@
 
 (defclass fundamental-stream (impl-specific-gray:fundamental-stream) ())
 (defclass fundamental-input-stream
-    (impl-specific-gray:fundamental-input-stream fundamental-stream) ())
+    (fundamental-stream impl-specific-gray:fundamental-input-stream) ())
 (defclass fundamental-output-stream
-    (impl-specific-gray:fundamental-output-stream fundamental-stream) ())
+    (fundamental-stream impl-specific-gray:fundamental-output-stream) ())
 (defclass fundamental-character-stream
-    (impl-specific-gray:fundamental-character-stream fundamental-stream) ())
+    (fundamental-stream impl-specific-gray:fundamental-character-stream) ())
 (defclass fundamental-binary-stream
-    (impl-specific-gray:fundamental-binary-stream fundamental-stream) ())
+    (fundamental-stream impl-specific-gray:fundamental-binary-stream) ())
 (defclass fundamental-character-input-stream
-    (impl-specific-gray:fundamental-character-input-stream
-     fundamental-input-stream fundamental-character-stream) ())
+    (fundamental-input-stream fundamental-character-stream
+     impl-specific-gray:fundamental-character-input-stream) ())
 (defclass fundamental-character-output-stream
-    (impl-specific-gray:fundamental-character-output-stream
-     fundamental-output-stream fundamental-character-stream) ())
+    (fundamental-output-stream fundamental-character-stream
+     impl-specific-gray:fundamental-character-output-stream) ())
 (defclass fundamental-binary-input-stream
-    (impl-specific-gray:fundamental-binary-input-stream
-     fundamental-input-stream fundamental-binary-stream) ())
+    (fundamental-input-stream fundamental-binary-stream
+     impl-specific-gray:fundamental-binary-input-stream) ())
 (defclass fundamental-binary-output-stream
-    (impl-specific-gray:fundamental-binary-output-stream
-     fundamental-output-stream fundamental-binary-stream) ())
+    (fundamental-output-stream fundamental-binary-stream
+     impl-specific-gray:fundamental-binary-output-stream) ())
 
 (defgeneric stream-read-sequence
     (stream sequence start end &key &allow-other-keys))
