@@ -2,6 +2,18 @@
 
 ;;; test framework
 
+#|
+  Used like this:
+
+  (list (test (a) (assert (= 1 2)))
+        (test (b) (assert (= 2 2)))
+        (test (c) (assert (= 2 3))))
+
+  => ;; list of test results, 2 failed 1 passed
+     (#<TEST-RESULT A :FAIL Failed assertion: (= 1 2)> #<TEST-RESULT B :OK> #<TEST-RESULT C :FAIL Failed assertion: (= 2 3)>)
+
+|#
+
 (defclass test-result ()
   ((name :type symbol
          :initarg :name
@@ -44,16 +56,3 @@
 this macro returns a failed TEST-RESULT; otherwise
 returns a successfull TEST-RESULT."
   `(test-impl (quote ,name) (lambda () ,@body)))
-
-
-#|
-  Used like this:
-
-  (list (test (a) (assert (= 1 2)))
-        (test (b) (assert (= 2 2)))
-        (test (c) (assert (= 2 3))))
-
-  => ;; list of test results, 2 failed 1 passed
-     (#<TEST-RESULT A :FAIL Failed assertion: (= 1 2)> #<TEST-RESULT B :OK> #<TEST-RESULT C :FAIL Failed assertion: (= 2 3)>)
-
-|#
