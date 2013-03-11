@@ -19,7 +19,7 @@
     (handler-bind ((invoked (lambda (i)
                               (let ((invocation (cons (method i) (args i))))
                                 (when (equalp invocation expected-invocation)
-                                  (return-from assert-invoked-impl nil))
+                                  (RETURN-FROM assert-invoked-impl nil))
                                 (push invocation actual-invocations)))))
       (funcall body-fn))
     (let ((*package* (find-package :keyword))) ; ensures package prefixes are printed
