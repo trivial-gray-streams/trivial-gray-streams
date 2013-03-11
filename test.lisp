@@ -34,7 +34,30 @@ hasn't been invoked, signals an ERROR."
 (defun invoked (method &rest args)
   (signal 'invoked :method method :args args))
 
-;;; end assert-invoked
+;;; The tests.
+
+#|
+  We will define a gray stream class, specialise 
+  the generic function methods on it and test that the methods
+  are invoked when we call functions from common-lisp package
+  on that stream.
+
+  Some for the gray generic functions are only invoked by default
+  methods of other generic functions:
+
+  cl:format ~t or cl:pprint -> stream-advance-to-column -> stream-line-column
+                                                           stream-write-char
+  cl:fresh-line -> stream-fresh-line -> stream-start-line-p -> stream-line-column
+                                        stream-terpri
+
+
+  If we define our methods for stream-advance-to-column and stream-fresh-line,
+  then stream-start-line-p, stream-terpri, stram-line-column are not invoked.
+
+  Therefore we define another gray stream class. The first class is used
+  for all lower level functions (stream-terpri) and the second class
+  defines higher level functions (stream-fresh-line)
+|#
 
 (defclass test-stream (fundamental-binary-input-stream
                        fundamental-binary-output-stream
@@ -120,23 +143,6 @@ hasn't been invoked, signals an ERROR."
      (assert-invoked (,method ,@args)
        ,@body)))
 
-#|
-  cl:format ~t or cl:pprint -> stream-advance-to-column -> stream-line-column
-                                                           stream-write-char
-  cl:fresh-line -> stream-fresh-line -> stream-start-line-p
-                                        stream-terpri
-
-
-STREAM-START-LINE-P: expected invocation: (ccl:stream-start-line-p #<trivial-gray-streams-test::test-stream #x21012fe62d>)
-                                  actual: (ccl:stream-fresh-line #<trivial-gray-streams-test::test-stream #x21012fe62d>)
-
-STREAM-TERPRI: expected invocation: (ccl:stream-terpri #<trivial-gray-streams-test::test-stream #x21012fe62d>)
-                            actual: (ccl:stream-write-char #<trivial-gray-streams-test::test-stream #x21012fe62d> #\newline)
-
-STREAM-ADVANCE-TO-COLUMN: expected invocation: (ccl:stream-advance-to-column #<trivial-gray-streams-test::test-stream #x21012fe62d> 11)
-                                       actual: (ccl:stream-line-column #<trivial-gray-streams-test::test-stream #x21012fe62d>)
-
-|#
 (defun run-tests ()
   (let ((s (make-instance 'test-stream))
         (s2 (make-instance 'test-stream2)))
@@ -161,8 +167,8 @@ STREAM-ADVANCE-TO-COLUMN: expected invocation: (ccl:stream-advance-to-column #<t
        (format s "~10,t"))
      (test-invoked (stream-start-line-p s)
        (fresh-line s))
-     (test-invoked (stream-write-string s "hello" 1 7)
-       (write-string "hello" s :start 1 :end 7))
+     (test-invoked (stream-write-string s "hello" 1 4)
+       (write-string "hello" s :start 1 :end 4))
      (test-invoked (stream-terpri s)
        (fresh-line s))
      (test-invoked (stream-fresh-line s2)
@@ -171,18 +177,15 @@ STREAM-ADVANCE-TO-COLUMN: expected invocation: (ccl:stream-advance-to-column #<t
        (finish-output s))
      (test-invoked (stream-force-output s)
        (force-output s))
-     ;; sbcl bug https://bugs.launchpad.net/sbcl/+bug/1153257
      (test-invoked (stream-clear-output s)
        (clear-output s))
-     ;; not used by SBCL
      (test-invoked (stream-advance-to-column s2 10)
         (format s2 "~10,t"))
      (test-invoked (stream-read-byte s)
        (read-byte s))
      (test-invoked (stream-write-byte s 1)
        (write-byte 1 s))
-
-     ;; extensions
+     ;;; extensions
      (test-invoked (stream-read-sequence s #(1 2) :start 0 :end 1)
        (read-sequence #(1 2) s :start 0 :end 1))
      (test-invoked (stream-write-sequence s #(1 2) :start 0 :end 1)
