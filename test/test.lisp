@@ -42,21 +42,21 @@ hasn't been invoked, signals an ERROR."
   are invoked when we call functions from common-lisp package
   on that stream.
 
-  Some for the gray generic functions are only invoked by default
+  Some of the gray generic functions are only invoked by default
   methods of other generic functions:
 
-  cl:format ~t or cl:pprint -> stream-advance-to-column -> stream-line-column
-                                                           stream-write-char
-  cl:fresh-line -> stream-fresh-line -> stream-start-line-p -> stream-line-column
-                                        stream-terpri
+      cl:format ~t or cl:pprint -> stream-advance-to-column -> stream-line-column
+                                                               stream-write-char
+      cl:fresh-line -> stream-fresh-line -> stream-start-line-p -> stream-line-column
+                                            stream-terpri
 
 
   If we define our methods for stream-advance-to-column and stream-fresh-line,
   then stream-start-line-p, stream-terpri, stram-line-column are not invoked.
 
   Therefore we define another gray stream class. The first class is used
-  for all lower level functions (stream-terpri) and the second class
-  defines higher level functions (stream-fresh-line)
+  for all lower level functions (stream-terpri). The second class
+  is used to test methods for higher level functions (stream-fresh-line).
 |#
 
 (defclass test-stream (fundamental-binary-input-stream
