@@ -2,6 +2,7 @@
 
 (defsystem :trivial-gray-streams-test
   :version "2.0"
-  :serial t
   :depends-on (:trivial-gray-streams)
+  :pathname #P"test/"
+  :serial t
   :components ((:file "test-framework") (:file "test")))
