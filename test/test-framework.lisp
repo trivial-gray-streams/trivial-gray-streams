@@ -5,12 +5,14 @@
 #|
   Used like this:
 
-  (list (test (a) (assert (= 1 2)))
-        (test (b) (assert (= 2 2)))
-        (test (c) (assert (= 2 3))))
+  (list (test (add) (assert (= 5 (+ 2 2))))
+        (test (mul) (assert (= 4 (* 2 2))))
+        (test (subst) (assert (= 3 (- 4 2)))))
 
   => ;; list of test results, 2 failed 1 passed
-     (#<TEST-RESULT A :FAIL Failed assertion: (= 1 2)> #<TEST-RESULT B :OK> #<TEST-RESULT C :FAIL Failed assertion: (= 2 3)>)
+     (#<TEST-RESULT ADD :FAIL The assertion (= 5 (+ 2 2)) failed.>
+      #<TEST-RESULT MUL :OK>
+      #<TEST-RESULT SUBST :FAIL The assertion (= 3 (- 4 2)) failed.>)
 
 |#
 
