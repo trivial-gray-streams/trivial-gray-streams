@@ -32,20 +32,41 @@
 (defgeneric stream-file-position (stream))
 (defgeneric (setf stream-file-position) (newval stream))
 
-(defmethod stream-write-string
-    ((stream fundamental-output-stream) seq &optional start end)
-  (stream-write-sequence stream seq (or start 0) (or end (length seq))))
+;;; Default methods for stream-read/write-sequence.
+;;;
+;;; It would be nice to implement default methods
+;;; in trivial gray streams, maybe borrowing the code
+;;; from some of CL implementations. But now, for
+;;; simplicity we will fallback to default implementation
+;;; of the implementation-specific analogue function with calls us.
+
+(defmethod stream-read-sequence ((stream fundamental-input-stream) seq start end &key)
+  'fallback)
+
+(defmethod stream-write-sequence ((stream fundamental-output-stream) seq start end &key)
+  'fallback)
+
+(defmacro or-fallback (&body body)
+  `(let ((result ,@body))
+     (if (eq result (quote fallback))
+         (call-next-method)
+         result)))
 
 ;; Implementations should provide this default method, I believe, but
 ;; at least sbcl and allegro don't.
 (defmethod stream-terpri ((stream fundamental-output-stream))
   (write-char #\newline stream))
 
-(defmethod stream-file-position ((stream fundamental-stream))
+;; stream-file-position could be specialized to
+;; fundamental-stream, but to support backward
+;; compatibility with flexi-streams, we specialize
+;; it on T. The reason: flexi-streams calls stream-file-position
+;; for non-gray stream:
+;; https://github.com/edicl/flexi-streams/issues/4
+(defmethod stream-file-position ((stream t))
   nil)
 
-(defmethod (setf stream-file-position)
-    (newval (stream fundamental-stream))
+(defmethod (setf stream-file-position) (newval (stream t))
   (declare (ignore newval))
   nil)
 
@@ -53,11 +74,11 @@
 (progn
   (defmethod gray-streams:stream-read-sequence 
       ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
   
   (defmethod gray-streams:stream-write-sequence 
       ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq)))))
   
   (defmethod gray-streams:stream-write-string 
       ((stream xp::xp-structure) string &optional (start 0) (end (length string)))
@@ -77,11 +98,11 @@
 (progn
   (defmethod excl:stream-read-sequence
       ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
 
   (defmethod excl:stream-write-sequence
       ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq)))))
 
   (defmethod excl::stream-file-position
        ((stream fundamental-stream) &optional position)
@@ -93,19 +114,19 @@
 (progn
   (defmethod ext:stream-read-sequence
       ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod ext:stream-write-sequence
       ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq)))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq))))))
 
 #+lispworks
 (progn
   (defmethod stream:stream-read-sequence
       ((s fundamental-input-stream) seq start end)
-    (stream-read-sequence s seq start end))
+    (or-fallback (stream-read-sequence s seq start end)))
   (defmethod stream:stream-write-sequence
       ((s fundamental-output-stream) seq start end)
-    (stream-write-sequence s seq start end))
+    (or-fallback (stream-write-sequence s seq start end)))
 
   (defmethod stream:stream-file-position ((stream fundamental-stream))
     (stream-file-position stream))
@@ -117,15 +138,15 @@
 (progn
   (defmethod ccl:stream-read-vector
       ((s fundamental-input-stream) seq start end)
-    (stream-read-sequence s seq start end))
+    (or-fallback (stream-read-sequence s seq start end)))
   (defmethod ccl:stream-write-vector
       ((s fundamental-output-stream) seq start end)
-    (stream-write-sequence s seq start end))
+    (or-fallback (stream-write-sequence s seq start end)))
 
   (defmethod ccl:stream-read-list ((s fundamental-input-stream) list count)
-    (stream-read-sequence s list 0 count))
+    (or-fallback (stream-read-sequence s list 0 count)))
   (defmethod ccl:stream-write-list ((s fundamental-output-stream) list count)
-    (stream-write-sequence s list 0 count))
+    (or-fallback (stream-write-sequence s list 0 count)))
 
   (defmethod ccl::stream-position ((stream fundamental-stream) &optional new-position)
     (if new-position
@@ -146,12 +167,12 @@
   #+clisp-has-stream-read/write-sequence
   (defmethod gray:stream-read-sequence
       (seq (s fundamental-input-stream) &key start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
 
   #+clisp-has-stream-read/write-sequence
   (defmethod gray:stream-write-sequence
       (seq (s fundamental-output-stream) &key start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq)))))
 
   ;;; for old CLISP
   (defmethod gray:stream-read-byte-sequence
@@ -162,7 +183,7 @@
       (error "this stream does not support the NO-HANG argument"))
     (when interactive
       (error "this stream does not support the INTERACTIVE argument"))
-    (stream-read-sequence s seq start end))
+    (or-fallback (stream-read-sequence s seq start end)))
 
   (defmethod gray:stream-write-byte-sequence
       ((s fundamental-output-stream)
@@ -172,15 +193,15 @@
       (error "this stream does not support the NO-HANG argument"))
     (when interactive
       (error "this stream does not support the INTERACTIVE argument"))
-    (stream-write-sequence s seq start end))
+    (or-fallback (stream-write-sequence s seq start end)))
 
   (defmethod gray:stream-read-char-sequence
       ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq start end))
+    (or-fallback (stream-read-sequence s seq start end)))
 
   (defmethod gray:stream-write-char-sequence
       ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq start end))
+    (or-fallback (stream-write-sequence s seq start end)))
 
   ;;; end of old CLISP read/write-sequence support
 
@@ -193,10 +214,10 @@
 (progn
   (defmethod sb-gray:stream-read-sequence
       ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod sb-gray:stream-write-sequence
       ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod sb-gray:stream-file-position 
       ((stream fundamental-stream) &optional position)
     (if position
@@ -210,19 +231,19 @@
 (progn
   (defmethod gray:stream-read-sequence
     ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod gray:stream-write-sequence
     ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq)))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq))))))
 
 #+mocl
 (progn
   (defmethod gray:stream-read-sequence
       ((s fundamental-input-stream) seq &optional start end)
-    (stream-read-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod gray:stream-write-sequence
       ((s fundamental-output-stream) seq &optional start end)
-    (stream-write-sequence s seq (or start 0) (or end (length seq))))
+    (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod gray:stream-file-position
       ((stream fundamental-stream) &optional position)
     (if position

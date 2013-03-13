@@ -23,6 +23,7 @@
 (defparameter *acl* (make-instance 'lisp-exe:acl :exe-path "C:\\Program Files (x86)\\acl90express\\alisp.exe"))
 
 (defun run-on-many-lisps (run-description test-run-dir quicklisp-dir lisps)
+  (ensure-directories-exist test-run-dir)
   (let ((fasl-root (merge-pathnames "fasl/" test-run-dir)))
     (labels ((log-name (lisp)
                (substitute #\- #\.
