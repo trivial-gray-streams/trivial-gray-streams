@@ -38,7 +38,7 @@ hasn't been invoked, signals an ERROR."
 
 #|
   We will define a gray stream class, specialise 
-  the generic function methods on it and test that the methods
+  the gray generic function methods on it and test that the methods
   are invoked when we call functions from common-lisp package
   on that stream.
 
