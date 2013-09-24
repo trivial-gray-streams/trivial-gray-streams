@@ -31,7 +31,7 @@
           :accessor cause)))
 
 (defun failed-p (test-result)
-  (eq (status test-result) :ok))
+  (eq (status test-result) :fail))
 
 (defmethod print-object ((r test-result) stream)
   (print-unreadable-object (r stream :type t)

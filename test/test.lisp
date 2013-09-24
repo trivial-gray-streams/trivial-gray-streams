@@ -197,7 +197,7 @@ hasn't been invoked, signals an ERROR."
          (file-position s 9))))))
 
 (defun failed-tests (results)
-  (remove-if-not (complement #'failed-p) results))
+  (remove-if-not #'failed-p results))
 
 (defun failed-test-names (results)
   (mapcar (lambda (result)
