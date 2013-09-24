@@ -38,7 +38,7 @@
 ;;; in trivial gray streams, maybe borrowing the code
 ;;; from some of CL implementations. But now, for
 ;;; simplicity we will fallback to default implementation
-;;; of the implementation-specific analogue function with calls us.
+;;; of the implementation-specific analogue function which calls us.
 
 (defmethod stream-read-sequence ((stream fundamental-input-stream) seq start end &key)
   'fallback)
