@@ -1,11 +1,15 @@
 trivial-gray-streams
 ====================
 
+Gray streams is an interface proposed for inclusion with ANSI CL by David N. Gray in
+Issue STREAM-DEFINITION-BY-USER (http://www.nhplace.com/kent/CL/Issues/stream-definition-by-user.html).
+The proposal did not make it into ANSI CL, but most popular CL
+implementations implement this facility anyway.
+
 This system provides an extremely thin compatibility layer for gray
 streams.  It is nearly *too* trivial for a complete package, except that
 I have copy&pasted this code into enough projects now that I decided to
 factor it out once again now, and then *never* have to touch it again.
-
 
 How to use it
 =============
