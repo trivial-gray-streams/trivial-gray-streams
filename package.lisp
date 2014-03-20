@@ -49,6 +49,7 @@
                #+lispworks :stream
                #+abcl :gray-streams
                #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl mocl) ...
+               #+ecl #:stream-file-position
                ,@gray-class-symbols
                ,@gray-function-symbols)
               (:export
