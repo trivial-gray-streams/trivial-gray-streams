@@ -229,6 +229,11 @@
 
 #+ecl
 (progn
+  (defmethod gray::stream-file-position 
+    ((stream fundamental-stream) &optional position)
+    (if position
+      (setf (stream-file-position stream) position)
+      (stream-file-position stream)))
   (defmethod gray:stream-read-sequence
     ((s fundamental-input-stream) seq &optional start end)
     (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
