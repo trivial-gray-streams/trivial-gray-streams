@@ -41,9 +41,11 @@
 ;;; of the implementation-specific analogue function which calls us.
 
 (defmethod stream-read-sequence ((stream fundamental-input-stream) seq start end &key)
+  (declare (ignore seq start end))
   'fallback)
 
 (defmethod stream-write-sequence ((stream fundamental-output-stream) seq start end &key)
+  (declare (ignore seq start end))
   'fallback)
 
 (defmacro or-fallback (&body body)
