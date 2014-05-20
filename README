@@ -35,4 +35,4 @@ Generic function STREAM-WRITE-SEQUENCE (stream sequence start end &key)
 Generic function STREAM-FILE-POSITION (stream) => file position
 Generic function (SETF STREAM-FILE-POSITION) (position-spec stream) => successp
 
-        Will only be called by ABCL, ACL, LispWorks, CCL, CLISP, SBCL and MOCL.
+        Will only be called by ABCL, ACL, LispWorks, CCL, CLISP, ECL, SBCL and MOCL.
