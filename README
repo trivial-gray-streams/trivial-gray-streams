@@ -14,7 +14,7 @@ How to use it
 =============
 
 Use the package TRIVIAL-GRAY-STREAMS to refer Gray stream
-classes to inherit from, generec functions to extend.
+classes to inherit from, generic functions to implement.
 
 Extensions
 ==========
