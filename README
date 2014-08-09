@@ -32,7 +32,7 @@ Generic function STREAM-READ-SEQUENCE (stream sequence start end &key)
 Generic function STREAM-WRITE-SEQUENCE (stream sequence start end &key)
 
     Notice that we use two required arguments and allow additional
-    keyword arguments.  Your methods on these function should have
+    keyword arguments. Your methods on these function should have
     compliant lambda lists:
         (stream sequence start end &key)
 
