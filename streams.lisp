@@ -112,7 +112,7 @@
          (setf (stream-file-position stream) position)
          (stream-file-position stream))))
 
-;; Untill 2014-08-09 CMUCL had not stream-file-position:
+;; Untill 2014-08-09 CMUCL did not have stream-file-position:
 ;; http://trac.common-lisp.net/cmucl/ticket/100
 #+cmu
 (eval-when (:compile-toplevel :load-toplevel :execute)
