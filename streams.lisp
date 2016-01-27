@@ -178,6 +178,22 @@
   (when (find-symbol (string '#:stream-read-sequence) '#:gray)
     (pushnew :clisp-has-stream-read/write-sequence *features*)))
 
+;; input-stream-p and output-stream-p aren't generic functions in
+;; CLISP. The fix is borrowed from McCLIM.
+#+clisp
+(ext:without-package-lock ("GRAY" "COMMON-LISP")
+  (unless (typep #'input-stream-p 'generic-function)
+    (setf (fdefinition (intern "ORIGINAL-INPUT-STREAM-P" (find-package :gray))) #'input-stream-p)
+    (fmakunbound 'input-stream-p)
+    (defgeneric input-stream-p (stream)
+      (:method ((stream stream)) (funcall (fdefinition (intern "ORIGINAL-OUTPUT-STREAM-P" (find-package :gray))) stream))))
+
+  (unless (typep #'output-stream-p 'generic-function)
+    (setf (fdefinition (intern "ORIGINAL-OUTPUT-STREAM-P" (find-package :gray))) #'output-stream-p)
+    (fmakunbound 'output-stream-p)
+    (defgeneric output-stream-p (stream)
+      (:method ((stream stream)) (funcall (fdefinition (intern "ORIGINAL-OUTPUT-STREAM-P" (find-package :gray))) stream)))))
+
 #+clisp
 (progn
 
