@@ -69,8 +69,7 @@
   nil)
 
 (defmethod (setf stream-file-position) (newval (stream t))
-  (declare (ignore newval))
-  nil)
+  newval)
 
 #+abcl
 (progn
