@@ -6,7 +6,7 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require :gray-streams))
 
-#+cmu
+#+(or cmu genera)
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require :gray-streams))
 
@@ -47,8 +47,8 @@
                #+(or clisp ecl mocl) :gray
                #+openmcl :ccl
                #+lispworks :stream
-               #+abcl :gray-streams
-               #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl mocl) ...
+               #+(or abcl genera) :gray-streams
+               #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl mocl genera) ...
                ,@gray-class-symbols
                ,@gray-function-symbols)
               (:export
