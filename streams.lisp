@@ -244,7 +244,7 @@
   (defmethod sb-gray:stream-line-length ((stream fundamental-stream))
     80))
 
-#+ecl
+#+(or ecl clasp)
 (progn
   (defmethod gray::stream-file-position 
     ((stream fundamental-stream) &optional position)

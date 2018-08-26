@@ -15,7 +15,7 @@
   (unless (fboundp 'excl:stream-write-string)
     (require "streamc.fasl")))
 
-#+ecl
+#+(or ecl clasp)
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (gray::redefine-cl-functions))
 
@@ -44,11 +44,11 @@
                #+sbcl :sb-gray
                #+allegro :excl
                #+cmu :ext
-               #+(or clisp ecl mocl) :gray
+               #+(or clisp ecl mocl clasp) :gray
                #+openmcl :ccl
                #+lispworks :stream
                #+(or abcl genera) :gray-streams
-               #-(or sbcl allegro cmu clisp openmcl lispworks ecl abcl mocl genera) ...
+               #-(or sbcl allegro cmu clisp openmcl lispworks ecl clasp abcl mocl genera) ...
                ,@gray-class-symbols
                ,@gray-function-symbols)
               (:export
