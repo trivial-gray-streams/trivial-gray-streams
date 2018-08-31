@@ -71,7 +71,8 @@
                        ;; extension functions
                        #:stream-read-sequence
                        #:stream-write-sequence
-                       #:stream-file-position
+                       #:stream-file-position2
                        ;; deprecated
-                       #:trivial-gray-stream-mixin))))))
+                       #:trivial-gray-stream-mixin
+                       #:stream-file-position))))))
   (frob))
