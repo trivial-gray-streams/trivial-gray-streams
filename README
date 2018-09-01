@@ -36,6 +36,7 @@ Generic function STREAM-WRITE-SEQUENCE (stream sequence start end &key)
     compliant lambda lists:
         (stream sequence start end &key)
 
-Generic function STREAM-FILE-POSITION2 (stream &optional new-position)
+Generic function STREAM-FILE-POSITION-2 (stream &optional new-position)
+
 (why 2 - because there is a deprecated symbol STREAM-FILE-POSITION
 which we can't use for backward compatibility reasons)

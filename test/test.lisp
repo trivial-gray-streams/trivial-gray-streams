@@ -136,11 +136,11 @@ hasn't been invoked, signals an ERROR."
 (defmethod (setf stream-file-position) (newval (s test-stream))
   (invoked '(setf stream-file-position) newval s))
 
-(defmethod stream-file-position2  ((s test-stream2)
+(defmethod stream-file-position-2  ((s test-stream2)
                                    &optional (newpos nil newpos-supplied-p))
   (invoked (if newpos-supplied-p
-               (invoked 'stream-file-position2 s newpos)
-               (invoked 'stream-file-position2 s))))
+               (invoked 'stream-file-position-2 s newpos)
+               (invoked 'stream-file-position-2 s))))
 
 ;; Convinience macro, used when we want to name
 ;; the test case with the same name as of the gray streams method we test.
@@ -201,10 +201,10 @@ hasn't been invoked, signals an ERROR."
      (test (setf-stream-file-position)
        (assert-invoked ((setf stream-file-position) 9 s)
          (file-position s 9)))
-     (test-invoked (stream-file-position2 s2)
+     (test-invoked (stream-file-position-2 s2)
        (file-position s2))
-     (test (stream-file-position2-set)
-       (assert-invoked (stream-file-position2 s2 9)
+     (test (stream-file-position-2-set)
+       (assert-invoked (stream-file-position-2 s2 9)
          (file-position s2 9))))))
 
 (defun failed-tests (results)

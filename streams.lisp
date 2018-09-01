@@ -29,7 +29,7 @@
 (defgeneric stream-write-sequence
     (stream sequence start end &key &allow-other-keys))
 
-(defgeneric stream-file-position2 (stream &optional newpos))
+(defgeneric stream-file-position-2 (stream &optional newpos))
 
 ;; steam-file-position is deprecated, because
 ;; the (setf stream-file-position) return value
@@ -71,7 +71,7 @@
 (defmethod stream-terpri ((stream fundamental-output-stream))
   (write-char #\newline stream))
 
-(defmethod stream-file-position2 ((stream fundamental-input-stream) &optional new-position)
+(defmethod stream-file-position-2 ((stream fundamental-input-stream) &optional new-position)
   ;; the default method calls the deprecated functions
   ;; for backward compatibility with streams created
   ;; when these functions were the official interface
@@ -113,8 +113,8 @@
   (defmethod gray-streams:stream-file-position
       ((s fundamental-stream) &optional position)
     (if position
-        (stream-file-position2 s position)
-        (stream-file-position2 s))))
+        (stream-file-position-2 s position)
+        (stream-file-position-2 s))))
 
 #+allegro
 (progn
@@ -129,8 +129,8 @@
   (defmethod excl::stream-file-position
        ((stream fundamental-stream) &optional position)
      (if position
-         (stream-file-position2 stream position)
-         (stream-file-position2 stream))))
+         (stream-file-position-2 stream position)
+         (stream-file-position-2 stream))))
 
 ;; Untill 2014-08-09 CMUCL did not have stream-file-position:
 ;; http://trac.common-lisp.net/cmucl/ticket/100
@@ -150,11 +150,11 @@
 
   #+cmu-has-stream-file-position
   (defmethod ext:stream-file-position ((stream fundamental-stream))
-    (stream-file-position2 stream))
+    (stream-file-position-2 stream))
 
   #+cmu-has-stream-file-position
   (defmethod (setf ext:stream-file-position) (position (stream fundamental-stream))
-    (stream-file-position2 stream position)))
+    (stream-file-position-2 stream position)))
 
 #+lispworks
 (progn
@@ -166,10 +166,10 @@
     (or-fallback (stream-write-sequence s seq start end)))
 
   (defmethod stream:stream-file-position ((stream fundamental-stream))
-    (stream-file-position2 stream))
+    (stream-file-position-2 stream))
   (defmethod (setf stream:stream-file-position)
       (newval (stream fundamental-stream))
-    (stream-file-position2 stream newval)))
+    (stream-file-position-2 stream newval)))
 
 #+openmcl
 (progn
@@ -187,8 +187,8 @@
 
   (defmethod ccl::stream-position ((stream fundamental-stream) &optional new-position)
     (if new-position
-	(stream-file-position2 stream new-position)
-	(stream-file-position2 stream))))
+	(stream-file-position-2 stream new-position)
+	(stream-file-position-2 stream))))
 
 ;; up to version 2.43 there were no
 ;; stream-read-sequence, stream-write-sequence
@@ -244,8 +244,8 @@
 
   (defmethod gray:stream-position ((stream fundamental-stream) position)
     (if position
-        (stream-file-position2 stream position)
-        (stream-file-position2 stream))))
+        (stream-file-position-2 stream position)
+        (stream-file-position-2 stream))))
 
 #+sbcl
 (progn
@@ -258,8 +258,8 @@
   (defmethod sb-gray:stream-file-position 
       ((stream fundamental-stream) &optional position)
     (if position
-        (stream-file-position2 stream position)
-        (stream-file-position2 stream)))
+        (stream-file-position-2 stream position)
+        (stream-file-position-2 stream)))
   ;; SBCL extension:
   (defmethod sb-gray:stream-line-length ((stream fundamental-stream))
     80))
@@ -269,8 +269,8 @@
   (defmethod gray::stream-file-position 
     ((stream fundamental-stream) &optional position)
     (if position
-      (stream-file-position2 stream position)
-      (stream-file-position2 stream)))
+      (stream-file-position-2 stream position)
+      (stream-file-position-2 stream)))
   (defmethod gray:stream-read-sequence
     ((s fundamental-input-stream) seq &optional start end)
     (or-fallback (stream-read-sequence s seq (or start 0) (or end (length seq)))))
@@ -289,8 +289,8 @@
   (defmethod gray:stream-file-position
       ((stream fundamental-stream) &optional position)
     (if position
-	(stream-file-position2 stream position)
-	(stream-file-position2 stream))))
+	(stream-file-position-2 stream position)
+	(stream-file-position-2 stream))))
 
 #+genera
 (progn
@@ -302,10 +302,10 @@
     (or-fallback (stream-write-sequence s seq (or start 0) (or end (length seq)))))
   (defmethod gray-streams:stream-file-position
       ((stream fundamental-stream))
-    (stream-file-position2 stream))
+    (stream-file-position-2 stream))
   (defmethod (setf gray-streams:stream-file-position)
       (position (stream fundamental-stream))
-    (stream-file-position2 stream position)))
+    (stream-file-position-2 stream position)))
 
 ;; deprecated
 (defclass trivial-gray-stream-mixin () ())
