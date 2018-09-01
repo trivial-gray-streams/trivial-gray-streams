@@ -137,7 +137,7 @@ hasn't been invoked, signals an ERROR."
   (invoked '(setf stream-file-position) newval s))
 
 (defmethod stream-file-position-2  ((s test-stream2)
-                                   &optional (newpos nil newpos-supplied-p))
+                                    &optional (newpos nil newpos-supplied-p))
   (invoked (if newpos-supplied-p
                (invoked 'stream-file-position-2 s newpos)
                (invoked 'stream-file-position-2 s))))

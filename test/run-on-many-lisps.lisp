@@ -56,22 +56,11 @@
 
 (run-on-many-lisps '(:lib-world "quicklisp 2013-02-17 + trivial-gray-streams.head"
                      :contact-email "avodonosov@yandex.ru")
-                   "C:\\Users\\anton\\projects\\trivial-gray-streams\\test2\\"
+                   "C:\\Users\\anton\\projects\\trivial-gray-streams\\test\\"
                    (merge-pathnames "quicklisp/" (user-homedir-pathname))
-                   (list ;*sbcl-1.1.0.45*
-                         *sbcl-win-branch-64* *sbcl-win-branch-32*
+                   (list *sbcl-1.1.0.45* *sbcl-win-branch-64* *sbcl-win-branch-32*
                          *abcl*
                          *clisp*
                          *ccl-1.8-x86* *ccl-1.8-x86-64*                         
                          *ecl-bytecode* *ecl-lisp-to-c*
                          *acl*))
-
-(let ((run-dir "C:\\Users\\anton\\projects\\trivial-gray-streams\\test3\\")
-      (ql-dir (merge-pathnames "quicklisp/" (user-homedir-pathname))))
-  (tg-agent::proc-run-libtest *ccl-1.8-x86*
-                              :alexandria
-                              '(:lib-world "quicklisp 2013-02-17 + trivial-gray-streams.head"
-                                :contact-email "avodonosov@yandex.ru")
-                              (merge-pathnames "alexandria.log" run-dir)
-                              ql-dir
-                              (merge-pathnames "fasl/" run-dir)))
