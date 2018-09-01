@@ -29,7 +29,7 @@
 (defgeneric stream-write-sequence
     (stream sequence start end &key &allow-other-keys))
 
-(defgeneric stream-file-position-2 (stream &optional newpos))
+(defgeneric stream-file-position-2 (stream &optional new-position))
 
 ;; steam-file-position is deprecated, because
 ;; the (setf stream-file-position) return value
@@ -71,7 +71,8 @@
 (defmethod stream-terpri ((stream fundamental-output-stream))
   (write-char #\newline stream))
 
-(defmethod stream-file-position-2 ((stream fundamental-input-stream) &optional new-position)
+(defmethod stream-file-position-2 ((stream fundamental-input-stream)
+                                   &optional new-position)
   ;; the default method calls the deprecated functions
   ;; for backward compatibility with streams created
   ;; when these functions were the official interface
