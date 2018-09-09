@@ -188,9 +188,9 @@ hasn't been invoked, signals an ERROR."
      ;;; extensions
      (let ((seq (vector 1 2)))
        (test-invoked (stream-read-sequence s seq :start 0 :end 1)
-                     (read-sequence seq s :start 0 :end 1))
+         (read-sequence seq s :start 0 :end 1))
        (test-invoked (stream-write-sequence s seq :start 0 :end 1)
-                     (write-sequence seq s :start 0 :end 1)))
+         (write-sequence seq s :start 0 :end 1)))
      (test-invoked (stream-file-position s)
        (file-position s))
      (test (setf-stream-file-position)
