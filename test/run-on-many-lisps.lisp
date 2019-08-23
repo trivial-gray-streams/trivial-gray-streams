@@ -1,3 +1,5 @@
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
+
 (ql:quickload :trivial-gray-streams)
 (ql:quickload :test-grid-agent)
 (ql:quickload :cl-fad)

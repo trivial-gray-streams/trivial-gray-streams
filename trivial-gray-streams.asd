@@ -1,4 +1,4 @@
-;;; -*- mode: lisp -*-
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; -*-
 
 (defsystem :trivial-gray-streams
   :description "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams)."

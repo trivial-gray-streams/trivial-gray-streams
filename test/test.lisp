@@ -1,3 +1,4 @@
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: TRIVIAL-GRAY-STREAMS-TEST -*-
 (in-package :trivial-gray-streams-test)
 
 ;;; assert-invoked - a tool to check that specified method with parameters has
