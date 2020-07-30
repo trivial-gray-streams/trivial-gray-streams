@@ -1,3 +1,5 @@
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
+
 #+xcvb (module ())
 
 (in-package :cl-user)

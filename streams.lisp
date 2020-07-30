@@ -1,3 +1,5 @@
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: TRIVIAL-GRAY-STREAMS -*-
+
 #+xcvb (module (:depends-on ("package")))
 
 (in-package :trivial-gray-streams)

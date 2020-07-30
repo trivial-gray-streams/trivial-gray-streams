@@ -1,4 +1,4 @@
-;;; -*- mode: lisp -*-
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; -*-
 
 (defsystem :trivial-gray-streams-test
   :version "2.0"
