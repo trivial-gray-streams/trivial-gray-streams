@@ -62,16 +62,20 @@
               (:use :cl)
               (:import-from #:impl-specific-gray
                             ;; We import and re-export only
-                            ;; function symbols;
+                            ;; function symbols.
                             ;; But we define our own classes
                             ;; mirroring the gray class hierarchy
-                            ;; of the lisp implementation (this
+                            ;; of the lisp implementation. This
                             ;; is necessary to define our methods
-                            ;; for particular generic functions)
+                            ;; for the implementation-specific
+                            ;; variations of stream-read-sequence,
+                            ;; stream-write-sequence, stream-file-position,
+                            ;; and call from them their portalbe
+                            ;; counterparts defined by trivial-gray-streams.
                             ,@gray-function-symbols)
               (:export ,@gray-class-symbols
                        ,@gray-function-symbols
-                       ;; extension functions
+                       ;; out extensions to the Gray proposal
                        #:stream-read-sequence
                        #:stream-write-sequence
                        #:stream-file-position
