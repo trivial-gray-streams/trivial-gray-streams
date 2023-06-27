@@ -46,12 +46,12 @@
                #+sbcl :sb-gray
                #+allegro :excl
                #+cmu :ext
-               #+(or clisp ecl mocl clasp) :gray
+               #+(or clisp ecl mkcl mocl clasp) :gray
                #+openmcl :ccl
                #+lispworks :stream
                #+(or abcl genera) :gray-streams
                #+mezzano :mezzano.gray
-               #-(or sbcl allegro cmu clisp openmcl lispworks ecl clasp abcl mocl genera mezzano) ...
+               #-(or sbcl allegro cmu clisp openmcl lispworks ecl clasp mkcl abcl mocl genera mezzano) ...
                ,@gray-class-symbols
                ,@gray-function-symbols)
               (:export
