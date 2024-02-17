@@ -5,6 +5,6 @@
   :license "MIT"
   :author "David Lichteblau"
   :maintainer "Anton Vodonosov <avodonosov@yandex.ru>"
-  :version "2.0"
+  :version "2.1"
   :serial t
   :components ((:file "package") (:file "streams")))
