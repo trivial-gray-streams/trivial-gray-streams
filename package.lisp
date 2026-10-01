@@ -56,6 +56,7 @@
               (:use :cl)
               (:import-from
                #+sbcl :sb-gray
+               #+egcl :egcl-gray-streams
                #+allegro :excl
                #+cmu :ext
                #+(or clisp ecl mkcl mocl clasp clamiga) :gray
@@ -64,7 +65,7 @@
                #+(or abcl genera) :gray-streams
                #+mezzano :mezzano.gray
                #+dotcl :dotcl-gray
-               #-(or sbcl allegro cmu clisp openmcl lispworks ecl clasp mkcl abcl mocl genera mezzano dotcl clamiga) ...
+               #-(or egcl sbcl allegro cmu clisp openmcl lispworks ecl clasp mkcl abcl mocl genera mezzano dotcl clamiga) ...
                ,@gray-class-symbols
                ,@gray-function-symbols)
               (:export
