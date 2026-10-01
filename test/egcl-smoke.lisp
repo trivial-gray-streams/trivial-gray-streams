@@ -3,13 +3,13 @@
 (require :asdf)
 (asdf:load-asd (merge-pathnames "../trivial-gray-streams.asd" *load-truename*))
 (asdf:load-system :trivial-gray-streams)
-#+(or torcl sbcl)
+#+(or egcl sbcl)
 (dolist (name '("STREAM-READ-CHAR" "STREAM-READ-BYTE" "STREAM-WRITE-CHAR"
                 "STREAM-UNREAD-CHAR" "STREAM-FINISH-OUTPUT"))
   (assert (eq (find-symbol name :trivial-gray-streams)
-              (find-symbol name #+torcl :torcl-gray-streams #+sbcl :sb-gray))))
+              (find-symbol name #+egcl :egcl-gray-streams #+sbcl :sb-gray))))
 (assert (subtypep 'trivial-gray-streams:fundamental-character-input-stream
-                  #+torcl 'torcl-gray-streams:fundamental-character-input-stream
+                  #+egcl 'egcl-gray-streams:fundamental-character-input-stream
                   #+sbcl 'sb-gray:fundamental-character-input-stream
-                  #-(or torcl sbcl) 'stream))
+                  #-(or egcl sbcl) 'stream))
 (format t "GRAY-PORT-OK~%")
